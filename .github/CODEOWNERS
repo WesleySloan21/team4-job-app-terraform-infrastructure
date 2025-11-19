@@ -1,0 +1,5 @@
+# CODEOWNERS file for team4-job-app-terraform-infrastructure
+# This file defines code ownership and review requirements for the repository
+
+# Default owners for all files in the repo
+* @reespozzi @ChrisThompsonK
