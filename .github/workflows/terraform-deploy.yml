@@ -48,11 +48,6 @@ jobs:
           echo "::add-mask::$(jq -r .tenantId <<< '${{ secrets.AZURE_CREDENTIALS }}')"
           echo "ARM_TENANT_ID=$(jq -r .tenantId <<< '${{ secrets.AZURE_CREDENTIALS }}')" >> $GITHUB_ENV
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with: 
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Terraform Init
         run: terraform init
 
