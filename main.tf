@@ -89,18 +89,18 @@ resource "azurerm_log_analytics_workspace" "main" {
 
 # Create Container App Environment
 resource "azurerm_container_app_environment" "main" {
-  name                           = var.environment_name != "" ? var.environment_name : "aca-env"
-  location                       = azurerm_resource_group.main.location
-  resource_group_name            = azurerm_resource_group.main.name
-  log_analytics_workspace_id     = azurerm_log_analytics_workspace.main.id
+  name                       = var.environment_name != "" ? var.environment_name : "aca-env"
+  location                   = azurerm_resource_group.main.location
+  resource_group_name        = azurerm_resource_group.main.name
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
 
   tags = var.tags
 }
 
 # Create Container App (optional - only if container_app_name is provided)
 resource "azurerm_container_app" "main" {
-  count               = var.container_app_name != "" ? 1 : 0
-  name                = var.container_app_name
+  count                        = var.container_app_name != "" ? 1 : 0
+  name                         = var.container_app_name
   container_app_environment_id = azurerm_container_app_environment.main.id
   resource_group_name          = azurerm_resource_group.main.name
   revision_mode                = "Single"
