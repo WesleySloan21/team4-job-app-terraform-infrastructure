@@ -40,33 +40,3 @@ variable "environment_name" {
   type        = string
   default     = ""
 }
-
-variable "container_app_name" {
-  description = "Name of the Container App"
-  type        = string
-  default     = ""
-}
-
-variable "container_image" {
-  description = "Container image to deploy (e.g., mcr.microsoft.com/azuredocs/aca-helloworld:latest)"
-  type        = string
-  default     = "mcr.microsoft.com/azuredocs/aca-helloworld:latest"
-}
-
-variable "container_port" {
-  description = "Port that the container listens on"
-  type        = number
-  default     = 80
-}
-
-variable "cpu" {
-  description = "CPU cores for the container (e.g., 0.25, 0.5, 1.0)"
-  type        = string
-  default     = "0.25"
-}
-
-variable "memory" {
-  description = "Memory for the container (e.g., 0.5Gi, 1Gi, 2Gi)"
-  type        = string
-  default     = "0.5Gi"
-}
