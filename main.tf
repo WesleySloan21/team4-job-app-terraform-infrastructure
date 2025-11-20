@@ -75,3 +75,57 @@ resource "azurerm_key_vault_access_policy" "container_app" {
 
   depends_on = [azurerm_key_vault.main]
 }
+
+# Create Log Analytics workspace for Container App monitoring
+resource "azurerm_log_analytics_workspace" "main" {
+  name                = "law-${var.environment_name != "" ? var.environment_name : "aca"}"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  tags = var.tags
+}
+
+# Create Container App Environment
+resource "azurerm_container_app_environment" "main" {
+  name                           = var.environment_name != "" ? var.environment_name : "aca-env"
+  location                       = azurerm_resource_group.main.location
+  resource_group_name            = azurerm_resource_group.main.name
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.main.id
+
+  tags = var.tags
+}
+
+# Create Container App (optional - only if container_app_name is provided)
+resource "azurerm_container_app" "main" {
+  count               = var.container_app_name != "" ? 1 : 0
+  name                = var.container_app_name
+  container_app_environment_id = azurerm_container_app_environment.main.id
+  resource_group_name          = azurerm_resource_group.main.name
+  revision_mode                = "Single"
+
+  template {
+    container {
+      name   = var.container_app_name
+      image  = var.container_image
+      cpu    = var.cpu
+      memory = var.memory
+    }
+    min_replicas = 1
+    max_replicas = 1
+  }
+
+  ingress {
+    external_enabled = true
+    target_port      = var.container_port
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+
+  tags = var.tags
+
+  depends_on = [azurerm_container_app_environment.main]
+}
