@@ -75,3 +75,12 @@ resource "azurerm_key_vault_access_policy" "container_app" {
 
   depends_on = [azurerm_key_vault.main]
 }
+
+# Create Container App Environment
+resource "azurerm_container_app_environment" "main" {
+  name                = var.environment_name != "" ? var.environment_name : "aca-env"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  tags = var.tags
+}

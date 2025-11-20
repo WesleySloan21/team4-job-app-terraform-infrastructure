@@ -22,3 +22,19 @@ output "resource_group_location" {
   description = "Location of the resource group"
   value       = azurerm_resource_group.main.location
 }
+
+# Container App Environment outputs
+output "container_app_environment_id" {
+  description = "ID of the Container App Environment"
+  value       = azurerm_container_app_environment.main.id
+}
+
+output "container_app_environment_name" {
+  description = "Name of the Container App Environment"
+  value       = azurerm_container_app_environment.main.name
+}
+
+output "container_app_environment_static_ip" {
+  description = "Static IP of the Container App Environment"
+  value       = azurerm_container_app_environment.main.static_ip_address
+}

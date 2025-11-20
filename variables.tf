@@ -34,3 +34,9 @@ variable "container_app_identity_object_id" {
   type        = string
   default     = ""
 }
+
+variable "environment_name" {
+  description = "Name of the Container App Environment"
+  type        = string
+  default     = ""
+}
