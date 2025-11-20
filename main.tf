@@ -43,37 +43,14 @@ resource "azurerm_resource_group" "main" {
 
 # Create Azure Key Vault for managing secrets
 resource "azurerm_key_vault" "main" {
-  name                        = var.key_vault_name
-  location                    = azurerm_resource_group.main.location
-  resource_group_name         = azurerm_resource_group.main.name
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  sku_name                    = "standard"
-  enabled_for_disk_encryption = false
-  purge_protection_enabled    = false
-  soft_delete_retention_days  = 7
+  name                      = var.key_vault_name
+  location                  = azurerm_resource_group.main.location
+  resource_group_name       = azurerm_resource_group.main.name
+  tenant_id                 = data.azurerm_client_config.current.tenant_id
+  sku_name                  = "standard"
+  enable_rbac_authorization = true
 
   tags = var.tags
-}
-
-# Create access policy for current user/service principal
-resource "azurerm_key_vault_access_policy" "current_user" {
-  key_vault_id       = azurerm_key_vault.main.id
-  tenant_id          = data.azurerm_client_config.current.tenant_id
-  object_id          = data.azurerm_client_config.current.object_id
-  secret_permissions = ["Get", "List", "Set", "Delete", "Purge"]
-
-  depends_on = [azurerm_key_vault.main]
-}
-
-# Create access policy for Container App managed identity to read secrets
-resource "azurerm_key_vault_access_policy" "container_app" {
-  count              = var.create_container_app_access_policy ? 1 : 0
-  key_vault_id       = azurerm_key_vault.main.id
-  tenant_id          = data.azurerm_client_config.current.tenant_id
-  object_id          = var.container_app_identity_object_id
-  secret_permissions = ["Get", "List"]
-
-  depends_on = [azurerm_key_vault.main]
 }
 
 # Create Container App Environment
